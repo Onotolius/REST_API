@@ -13,14 +13,14 @@ class Controller
     }
     public function index()
     {
-        $tasks = file_get_contents($this->dataPath);
+        $tasks = json_decode(file_get_contents($this->dataPath), true);
         echo json_encode($tasks, JSON_PRETTY_PRINT);
     }
     public function store()
     {
         $input = file_get_contents('php://input');
         $jsonData = json_decode($input, true);
-        $tasks = json_decode(file_get_contents($this->dataPath, true));
+        $tasks = json_decode(file_get_contents($this->dataPath), true);
         if (!isset($jsonData['title'], $jsonData['description'])) {
             http_response_code(422);
             echo json_encode(['error' => 'Missing required fields']);

@@ -54,5 +54,6 @@ class Router
                 }
             }
         }
+        return (new Controller())->notFound();
     }
 }
