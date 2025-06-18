@@ -56,7 +56,7 @@ curl -X POST http://localhost:8000/tasks \
 
 curl -X PUT http://localhost:8000/tasks/1/edit \
  -H "Content-Type: application/json" \
- -d '{"title": "Updated title", "description": "Updated description"}' 5) Удалить задачу
+ -d '{"title": "Updated title", "description": "Updated description"}'
 
 ```
 
