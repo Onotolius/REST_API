@@ -13,14 +13,19 @@ class Controller
     }
     public function index()
     {
-        $json = file_get_contents($this->dataPath);
-        var_dump($json);
+        $tasks = file_get_contents($this->dataPath);
+        echo json_encode($tasks, JSON_PRETTY_PRINT);
     }
     public function store()
     {
         $input = file_get_contents('php://input');
         $jsonData = json_decode($input, true);
         $tasks = json_decode(file_get_contents($this->dataPath, true));
+        if (!isset($jsonData['title'], $jsonData['description'])) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Missing required fields']);
+            return;
+        }
         $newTask = [
             'id' => $this->generateNextId($tasks),
             'title' => $jsonData['title'],
@@ -28,14 +33,52 @@ class Controller
             'created_at' => date('c')
         ];
         $tasks[] = $newTask;
-        file_put_contents($this->dataPath, json_decode($tasks, JSON_PRETTY_PRINT));
+        file_put_contents($this->dataPath, json_encode($tasks, JSON_PRETTY_PRINT));
         echo json_encode(['message' => 'Task added', 'task' => $newTask]);
     }
-    public function show(int $id) {}
-    public function edit(int $id) {}
-    public function destroy(int $id) {}
-
-
+    public function show(int $id)
+    {
+        $tasks = json_decode(file_get_contents($this->dataPath), true);
+        foreach ($tasks as $task) {
+            if ($task['id'] == $id) {
+                echo json_encode($task, JSON_PRETTY_PRINT);
+                return;
+            }
+        }
+        $this->notFound();
+    }
+    public function edit(int $id)
+    {
+        $input = file_get_contents('php://input');
+        $jsonData = json_decode($input, true);
+        if (!isset($jsonData['title'], $jsonData['description'])) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Missing required fields']);
+            return;
+        }
+        $tasks = json_decode(file_get_contents($this->dataPath), true);
+        foreach ($tasks as $index => $task) {
+            if ($task['id'] == $id) {
+                $tasks[$index] = [
+                    'id' => $id,
+                    'title' => $jsonData['title'],
+                    'description' => $jsonData['description'],
+                ];
+                file_put_contents($this->dataPath, json_encode($tasks, JSON_PRETTY_PRINT));
+                echo json_encode(['message' => 'Task updated', 'task' => $tasks[$index]]);
+                return;
+            }
+        }
+        $this->notFound();
+    }
+    public function destroy(int $id)
+    {
+        $tasks = json_decode(file_get_contents($this->dataPath), true);
+        foreach ($tasks as $task) {
+            var_dump($task);
+        }
+        $this->notFound();
+    }
     public function notFound()
     {
         http_response_code(404);
