@@ -30,13 +30,18 @@
 ```
 curl -X GET http://localhost:8000/tasks
 
-2) Получить задачу по ID
+```
+
+2. Получить задачу по ID
+
 ```
 
 curl -X GET http://localhost:8000/tasks/1
 
 ```
-3) Создать задачу
+
+3. Создать задачу
+
 ```
 
 curl -X POST http://localhost:8000/tasks \
@@ -44,7 +49,9 @@ curl -X POST http://localhost:8000/tasks \
  -d '{"title": "Test task", "description": "Testing POST method"}'
 
 ```
-4) Обновить задачу
+
+4. Обновить задачу
+
 ```
 
 curl -X PUT http://localhost:8000/tasks/1/edit \
@@ -52,10 +59,15 @@ curl -X PUT http://localhost:8000/tasks/1/edit \
  -d '{"title": "Updated title", "description": "Updated description"}' 5) Удалить задачу
 
 ```
-curl -X DELETE http://localhost:8000/tasks/1
 
-## 🗃 Хранилище данных
-Все задачи сохраняются в файл:
-/data/tasks.json
+5. Удалить задачу
 
 ```
+   curl -X DELETE http://localhost:8000/tasks/1
+
+```
+
+## 🗃 Хранилище данных
+
+Все задачи сохраняются в файл:
+/data/tasks.json
