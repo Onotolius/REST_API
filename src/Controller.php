@@ -74,8 +74,14 @@ class Controller
     public function destroy(int $id)
     {
         $tasks = json_decode(file_get_contents($this->dataPath), true);
-        foreach ($tasks as $task) {
-            var_dump($task);
+        foreach ($tasks as $index => $task) {
+            if ($task['id'] == $id) {
+                $deletedTask = $task;
+                unset($tasks[$index]);
+                file_put_contents($this->dataPath, json_encode($tasks, JSON_PRETTY_PRINT));
+                echo json_encode(['message' => 'Task deleted', 'task' => $deletedTask]);
+                return;
+            }
         }
         $this->notFound();
     }
